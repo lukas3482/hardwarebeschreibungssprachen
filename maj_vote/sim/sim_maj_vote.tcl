@@ -11,6 +11,7 @@ vlog tb_maj_vote.sv
 vsim tb_maj_vote
 
 # run simulation
+do wave.do
 run -all
 
 # view waveform
