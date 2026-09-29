@@ -25,15 +25,15 @@ maj_vote dut (
 initial begin
     // executed line by line
     // here we are at simulation time = 0
-    tb_x2 = 1'b0
-    tb_x1 = 1'b0
-    tb_x0 = 1'b0
+    tb_x2 = 1'b0;
+    tb_x1 = 1'b0;
+    tb_x0 = 1'b0;
 
     #100ns; // wait for 100ns
 
     for(int i = 0; i <= 7; i++) begin
         {tb_x2, tb_x1, tb_x0} = i;
-        #100ns
+        #100ns;
     end
 end
 
