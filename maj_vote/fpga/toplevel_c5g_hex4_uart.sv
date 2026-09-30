@@ -47,6 +47,12 @@ module toplevel_c5g_hex4_uart(
 //  Structural coding
 //=======================================================
 
-
+maj_vote maj_vote_u0(
+	.x2 (SW[2]),
+	.x1 (SW[1]),
+	.x0 (SW[0]),
+	.y_gates (LEDG[0]),
+	.y_behav (LEDR[0])
+);
 
 endmodule
