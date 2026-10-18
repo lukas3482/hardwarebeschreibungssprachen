@@ -41,6 +41,14 @@ simulation/
 xsim.dir/
 webtalk*
 
+# LaTeX
+*.aux
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
 # Editoren / IDEs
 .vscode/
 .idea/

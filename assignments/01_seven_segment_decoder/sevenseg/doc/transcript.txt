@@ -1,0 +1,16 @@
+bin_i = 0 | hex_o = 0111111 | hexn_o = 1000000
+bin_i = 1 | hex_o = 0000110 | hexn_o = 1111001
+bin_i = 2 | hex_o = 1011011 | hexn_o = 0100100
+bin_i = 3 | hex_o = 1001111 | hexn_o = 0110000
+bin_i = 4 | hex_o = 1100110 | hexn_o = 0011001
+bin_i = 5 | hex_o = 1101101 | hexn_o = 0010010
+bin_i = 6 | hex_o = 1111101 | hexn_o = 0000010
+bin_i = 7 | hex_o = 0000111 | hexn_o = 1111000
+bin_i = 8 | hex_o = 1111111 | hexn_o = 0000000
+bin_i = 9 | hex_o = 1101111 | hexn_o = 0010000
+bin_i = a | hex_o = 1110111 | hexn_o = 0001000
+bin_i = b | hex_o = 1111100 | hexn_o = 0000011
+bin_i = c | hex_o = 0111001 | hexn_o = 1000110
+bin_i = d | hex_o = 1011110 | hexn_o = 0100001
+bin_i = e | hex_o = 1111001 | hexn_o = 0000110
+bin_i = f | hex_o = 1110001 | hexn_o = 0001110
