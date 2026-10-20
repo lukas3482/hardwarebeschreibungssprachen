@@ -51,9 +51,12 @@ logic cnt_en;
 logic load;
 assign load = ~KEY[0];		// KEY is active low
 
-logic [7:0] pwm_thr_0, pwm_thr_1, pwm_thr_2, pwm_thr_3, pwm_thr_4;
-logic [7:0] pwm_thr_5, pwm_thr_6, pwm_thr_7, pwm_thr_8, pwm_thr_9;
-logic pwm0, pwm1, pwm2, pwm3, pwm4, pwm5, pwm6, pwm7, pwm8, pwm9;
+localparam int CHANNELS = 10;
+
+// counter value (8 bit) -> rom address
+logic [7:0]  cnt     [CHANNELS];
+// ROM data (16 bit, gamma 2,2) -> PWM threshold
+logic [15:0] pwm_thr [CHANNELS];
 
 
 //=======================================================
@@ -67,275 +70,41 @@ prescaler prescaler_u0(
 	.en_o 		(cnt_en)
 );
 
-// channel 0
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd0)
-) counter_u0(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_0),
-	.pwm_o		()
-);
+genvar i;
+generate
+	for (i = 0; i < CHANNELS; i = i + 1) begin : gen_channel
+		counter_pwm #(
+			.BITS		(8),
+			.PRELOAD	(25*i)		// 0, 25, 50, ... 225
+		) counter_u(
+			.clk_i		(clk50m),
+			.res_ni		(rst_n),
+			.en_i		(cnt_en),
+			.load_i		(load),
+			.thr_i		('0),
+			.cnt_o		(cnt[i]),
+			.pwm_o		()
+		);
 
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u0(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_0),
-	.cnt_o		(),
-	.pwm_o		(pwm0)
-);
+		rom256x16bit rom_u(
+			.address	(cnt[i]),
+			.clock		(clk50m),
+			.q			(pwm_thr[i])
+		);
 
-// channel 1
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd25)
-) counter_u1(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_1),
-	.pwm_o		()
-);
+		counter_pwm #(
+			.BITS		(16),
+			.PRELOAD	(16'h0000)
+		) pwm_u(
+			.clk_i		(clk50m),
+			.res_ni		(rst_n),
+			.en_i		(1'b1),
+			.load_i		(1'b0),
+			.thr_i		(pwm_thr[i]),
+			.cnt_o		(),
+			.pwm_o		(LEDR[i])
+		);
+	end
+endgenerate
 
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u1(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_1),
-	.cnt_o		(),
-	.pwm_o		(pwm1)
-);
-
-// channel 2
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd50)
-) counter_u2(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_2),
-	.pwm_o		()
-);
-
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u2(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_2),
-	.cnt_o		(),
-	.pwm_o		(pwm2)
-);
-
-// channel 3
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd75)
-) counter_u3(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_3),
-	.pwm_o		()
-);
-
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u3(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_3),
-	.cnt_o		(),
-	.pwm_o		(pwm3)
-);
-
-// channel 4
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd100)
-) counter_u4(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_4),
-	.pwm_o		()
-);
-
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u4(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_4),
-	.cnt_o		(),
-	.pwm_o		(pwm4)
-);
-
-// channel 5
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd125)
-) counter_u5(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_5),
-	.pwm_o		()
-);
-
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u5(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_5),
-	.cnt_o		(),
-	.pwm_o		(pwm5)
-);
-
-// channel 6
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd150)
-) counter_u6(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_6),
-	.pwm_o		()
-);
-
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u6(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_6),
-	.cnt_o		(),
-	.pwm_o		(pwm6)
-);
-
-// channel 7
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd175)
-) counter_u7(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_7),
-	.pwm_o		()
-);
-
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u7(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_7),
-	.cnt_o		(),
-	.pwm_o		(pwm7)
-);
-
-// channel 8
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd200)
-) counter_u8(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_8),
-	.pwm_o		()
-);
-
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u8(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_8),
-	.cnt_o		(),
-	.pwm_o		(pwm8)
-);
-
-// channel 9
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'd225)
-) counter_u9(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(cnt_en),
-	.load_i		(load),
-	.thr_i		('0),
-	.cnt_o		(pwm_thr_9),
-	.pwm_o		()
-);
-
-counter_pwm #(
-	.BITS		(8),
-	.PRELOAD	(8'h00)
-) pwm_u9(
-	.clk_i		(clk50m),
-	.res_ni		(rst_n),
-	.en_i		(1'b1),
-	.load_i		(1'b0),
-	.thr_i		(pwm_thr_9),
-	.cnt_o		(),
-	.pwm_o		(pwm9)
-);
-
-assign LEDR = {pwm9, pwm8, pwm7, pwm6, pwm5, pwm4, pwm3, pwm2, pwm1, pwm0};
 endmodule
