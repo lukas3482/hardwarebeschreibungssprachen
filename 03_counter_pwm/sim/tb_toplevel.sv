@@ -39,7 +39,7 @@ module tb_toplevel();
         end
     end
 
-    // Der echte Prescaler gibt hoechstens alle 10 ms ein Enable aus -> viel zu
+    // Der echte Prescaler gibt bei sw = 0 nur alle 100 ms ein Enable aus -> viel zu
     // langsam fuer die Simulation. Darum wird cnt_en hier ueberschrieben:
     // ein Enable-Puls alle 256 Takte (ca. eine PWM-Periode pro Zaehlschritt).
     int en_cnt = 0;

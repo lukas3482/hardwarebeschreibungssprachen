@@ -86,18 +86,20 @@ end
 // Kombinatorische Logik für die nächste Zählrichtung:
 // berechnet aus aktueller Richtung und Zählerstand, ob als nächstes
 // hoch- (1) oder runtergezählt (0) wird. Am oberen Ende (Maximum) -> runter,
-// am unteren Ende (0) -> wieder hoch. Richtungswechsel nur bei Enable.
+// am unteren Ende (0) -> wieder hoch. Der Richtungswechsel passiert sofort
+// im naechsten Takt (unabhaengig von en_i), damit der Zaehler an den Grenzen
+// nicht eine zusaetzliche Enable-Periode stehen bleibt.
 always_comb begin
     if(cnt_up & cnt_o < '1) begin
         cnt_up_new = 1'b1;
     end
-    else if (en_i & cnt_up & cnt_o == '1) begin
+    else if (cnt_up & cnt_o == '1) begin
         cnt_up_new = 1'b0;
     end
     else if ((!cnt_up) & (cnt_o > '0)) begin
         cnt_up_new = 1'b0;
     end
-    else if(en_i & (!cnt_up) & (cnt_o == '0)) begin
+    else if((!cnt_up) & (cnt_o == '0)) begin
         cnt_up_new = 1'b1;
     end
     else begin

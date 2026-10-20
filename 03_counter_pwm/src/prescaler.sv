@@ -25,7 +25,7 @@ always_comb begin
         3'b011 : preload_val    = PRELOAD_3;
         3'b100 : preload_val    = PRELOAD_4;
         3'b101 : preload_val    = PRELOAD_5;
-        3'b111 : preload_val    = PRELOAD_6;
+        3'b110 : preload_val    = PRELOAD_6;
         default : preload_val   = PRELOAD_DEFAULT;
     endcase
 end
