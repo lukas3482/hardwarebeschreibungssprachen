@@ -1,0 +1,12 @@
+OK   1 + 2          cmd=000010 | out=     3 (0x0003) zr=0 ng=0
+OK   100 - 50       cmd=010011 | out=    50 (0x0032) zr=0 ng=0
+OK   50 - 100       cmd=010011 | out=   -50 (0xffce) zr=0 ng=1
+OK   0              cmd=101010 | out=     0 (0x0000) zr=1 ng=0
+OK   0xaa & 0x55    cmd=000000 | out=     0 (0x0000) zr=1 ng=0
+OK   0xaa | 0x55    cmd=010101 | out=   255 (0x00ff) zr=0 ng=0
+OK   -1             cmd=111010 | out=    -1 (0xffff) zr=0 ng=1
+OK   !255           cmd=001101 | out=  -256 (0xff00) zr=0 ng=1
+OK   -255           cmd=001111 | out=  -255 (0xff01) zr=0 ng=1
+----------------------------------------------
+PASS: alle Tests bestanden
+----------------------------------------------
