@@ -1,0 +1,9 @@
+OK   @32767     instr=0111111111111111 | type=0 v=0x7fff a_c_d_j=0_000000_000_000
+OK   @0         instr=0000000000000000 | type=0 v=0x0000 a_c_d_j=0_000000_000_000
+OK   D=1        instr=1110111111010000 | type=1 v=0x6fd0 a_c_d_j=0_111111_010_000
+OK   D=D+A      instr=1110000010010000 | type=1 v=0x6090 a_c_d_j=0_000010_010_000
+OK   M=A+1      instr=1110110111001000 | type=1 v=0x6dc8 a_c_d_j=0_110111_001_000
+OK   AMD=M-1    instr=1111110010111000 | type=1 v=0x7cb8 a_c_d_j=1_110010_111_000
+OK   0;JMP      instr=1110101010000111 | type=1 v=0x6a87 a_c_d_j=0_101010_000_111
+OK   @8191      instr=0001111111111111 | type=0 v=0x1fff a_c_d_j=0_000000_000_000
+PASS: alle Tests bestanden

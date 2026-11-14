@@ -1,0 +1,14 @@
+OK   reset                  rst_n=0 en=0 load=0 d=0x0000 | q=0x0000
+OK   reset, load=1 en=1     rst_n=0 en=1 load=1 d=0xffff | q=0x0000
+OK   reset, load=1 en=1     rst_n=0 en=1 load=1 d=0xaa55 | q=0x0000
+OK   load 0x0000            rst_n=1 en=1 load=1 d=0x0000 | q=0x0000
+OK   load 0xffff            rst_n=1 en=1 load=1 d=0xffff | q=0xffff
+OK   load 0xaa55            rst_n=1 en=1 load=1 d=0xaa55 | q=0xaa55
+OK   load 0x55aa            rst_n=1 en=1 load=1 d=0x55aa | q=0x55aa
+OK   hold (load=0)          rst_n=1 en=1 load=0 d=0x1234 | q=0x55aa
+OK   hold (en=0)            rst_n=1 en=0 load=1 d=0x1234 | q=0x55aa
+OK   hold (load=0, en=0)    rst_n=1 en=0 load=0 d=0x1234 | q=0x55aa
+OK   load 0xffff            rst_n=1 en=1 load=1 d=0xffff | q=0xffff
+OK   async reset            rst_n=0 en=1 load=1 d=0xffff | q=0x0000
+OK   load 0xaa55            rst_n=1 en=1 load=1 d=0xaa55 | q=0xaa55
+PASS: alle Tests bestanden

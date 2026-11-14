@@ -1,0 +1,5 @@
+OK   alle Nullen    16384 Adressen geprueft
+OK   alle Einsen    16384 Adressen geprueft
+OK   Wert=Adresse   16384 Adressen geprueft
+OK   wren=0         addr=0x0abc | q=0x0abc
+PASS: alle Tests bestanden
