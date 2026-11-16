@@ -58,11 +58,11 @@ assign m     = inM;
 assign aload = instr_type ? cmd_d1  : 1'b1;
 assign ad    = instr_type ? alu_out : instr_v;
 
+// Vorlagen-Register haben keinen Enable-Eingang -> en25m wird mit load verknüpft
 dreg #(.W(DW)) u_a (
     .rst_n  (rst_n),
     .clk50m (clk50m),
-    .en     (en25m),
-    .load   (aload),
+    .load   (aload & en25m),
     .d      (ad),
     .q      (a)
 );
@@ -70,8 +70,7 @@ dreg #(.W(DW)) u_a (
 dreg #(.W(DW)) u_d (
     .rst_n  (rst_n),
     .clk50m (clk50m),
-    .en     (en25m),
-    .load   (dload),
+    .load   (dload & en25m),
     .d      (alu_out),
     .q      (d)
 );
@@ -94,11 +93,11 @@ alu #(.W(DW)) u_alu (
 );
 
 jmp_ctrl u_jmp_ctrl (
-    .cmd_j1  (cmd_j1),
-    .cmd_j2  (cmd_j2),
-    .cmd_j3  (cmd_j3),
-    .alu_zr  (alu_zr),
-    .alu_ng  (alu_ng),
+    .j1      (cmd_j1),
+    .j2      (cmd_j2),
+    .j3      (cmd_j3),
+    .neg     (alu_ng),
+    .zero    (alu_zr),
     .pc_load (pc_load),
     .pc_inc  (pc_inc)
 );
@@ -106,9 +105,8 @@ jmp_ctrl u_jmp_ctrl (
 pcount #(.W(PW)) u_pcount (
     .rst_n  (rst_n),
     .clk50m (clk50m),
-    .en     (en25m),
-    .load   (pc_load),
-    .inc    (pc_inc),
+    .load   (pc_load & en25m),
+    .inc    (pc_inc  & en25m),
     .cnt_in (a[PW-1:0]),
     .cnt    (pc)
 );
