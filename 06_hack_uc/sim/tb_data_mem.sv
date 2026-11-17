@@ -14,6 +14,17 @@ module tb_data_mem ();
     logic [15:0]    reg0x7001;      // LEDR
     logic [15:0]    reg0x7002;      // SEVENSEG
 
+// Adressen der einzelnen Bereiche
+    localparam logic [14:0] RAM_START = 15'h0000;
+    localparam logic [14:0] RAM_END   = 15'h3FFF;
+    localparam logic [14:0] LEDG      = 15'h7000;
+    localparam logic [14:0] LEDR      = 15'h7001;
+    localparam logic [14:0] SEVENSEG  = 15'h7002;
+    localparam logic [14:0] SW0       = 15'h7400;
+    localparam logic [14:0] SW1       = 15'h7401;
+    localparam logic [14:0] KEY       = 15'h7402;
+    localparam logic [14:0] UNUSED    = 15'h5000;
+
 // (2) DUT instance
     data_mem dut (.*);
 
@@ -39,27 +50,27 @@ initial begin
     rst_n     = 1'b1;
     #100ns;
 
-    // RAM (0x0000 - 0x3FFF)
-    task_write(15'h0000, 16'hA5A5);
-    task_check(15'h0000, 16'hA5A5);
-    task_write(15'h3FFF, 16'h5A5A);
-    task_check(15'h3FFF, 16'h5A5A);
+    // RAM (Anfang und Ende)
+    task_write(RAM_START, 16'hA5A5);
+    task_check(RAM_START, 16'hA5A5);
+    task_write(RAM_END,   16'h5A5A);
+    task_check(RAM_END,   16'h5A5A);
 
     // Ausgaenge (schreiben + zuruecklesen)
-    task_write(15'h7000, 16'h00F0);     // LEDG
-    task_check(15'h7000, 16'h00F0);
-    task_write(15'h7001, 16'h0F0F);     // LEDR
-    task_check(15'h7001, 16'h0F0F);
-    task_write(15'h7002, 16'hBEEF);     // SEVENSEG
-    task_check(15'h7002, 16'hBEEF);
+    task_write(LEDG,     16'h00F0);
+    task_check(LEDG,     16'h00F0);
+    task_write(LEDR,     16'h0F0F);
+    task_check(LEDR,     16'h0F0F);
+    task_write(SEVENSEG, 16'hBEEF);
+    task_check(SEVENSEG, 16'hBEEF);
 
     // Eingaenge (nur lesen)
-    task_check(15'h7400, 16'h1111);     // SW0
-    task_check(15'h7401, 16'h2222);     // SW1
-    task_check(15'h7402, 16'h3333);     // KEY
+    task_check(SW0, 16'h1111);
+    task_check(SW1, 16'h2222);
+    task_check(KEY, 16'h3333);
 
     // unbelegte Adresse -> 0
-    task_check(15'h5000, 16'h0000);
+    task_check(UNUSED, 16'h0000);
 
     #100ns;
     run_sim = 1'b0;
