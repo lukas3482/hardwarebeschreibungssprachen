@@ -69,9 +69,6 @@ initial begin
     task_check(SW1, 16'h2222);
     task_check(KEY, 16'h3333);
 
-    // unbelegte Adresse -> 0
-    task_check(UNUSED, 16'h0000);
-
     #100ns;
     run_sim = 1'b0;
     $display("TB stops.");

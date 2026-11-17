@@ -103,5 +103,8 @@ always_comb begin
     else                        data_out = '0;
 end
 
+assign reg0x7000 = data_out_ledg;
+assign reg0x7001 = data_out_ledr;
+assign reg0x7002 = data_out_sevenseg;
 
 endmodule
