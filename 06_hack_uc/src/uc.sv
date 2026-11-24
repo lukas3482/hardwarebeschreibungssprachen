@@ -19,10 +19,13 @@ module uc
 // Internal Wire declaration
 logic en25m;
 // ROM
-logic [PW-1:0]      pc;     // program counter
-logic [DW-1:0]      instr;  // machine code from rom
+logic [PW-1:0]      pc;         // program counter
+logic [DW-1:0]      instr;      // machine code from rom
 // bus to data_mem
-logic               writeM; // write enable
+logic               writeM;     // write enable
+logic [DW-1:0]      outM;       // CPU data_out, mem data_in
+logic [AW-1:0]      addressM;   // CPU addressM, data_mem addr_in
+logic [DW-1:0]      inM;        // data_mem data_out
 
 
 // FF for the 25Mhz enable
@@ -49,10 +52,10 @@ cpu_u0
     .clk50m         (clk50m),  
     .en25m          (en25m),   
     .instr          (instr),   
-    .inM            (),     
+    .inM            (inM),     
     .writeM         (writeM),  
-    .outM           (),    
-    .addressM       (),
+    .outM           (outM),    
+    .addressM       (addressM),
     .pc             (pc)      
 
 );
@@ -75,16 +78,16 @@ data_mem_u0
     .clk50m         (clk50m),
     // internal bus to the cpu
     .we             (writeM),
-    .data_in        (),
-    .addr           (),
-    .data_out       (),
+    .data_in        (outM),
+    .addr           (addressM),
+    .data_out       (inM),
     // IO to the FPGA pins
-    .reg0x7400      (),
-    .reg0x7401      (),
-    .reg0x7402      (),
-    .reg0x7000      (),
-    .reg0x7001      (),
-    .reg0x7002      ()
+    .reg0x7400      (reg0x7400),
+    .reg0x7401      (reg0x7401),
+    .reg0x7402      (reg0x7402),
+    .reg0x7000      (reg0x7000),
+    .reg0x7001      (reg0x7001),
+    .reg0x7002      (reg0x7002)
 );
 
 endmodule
